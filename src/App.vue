@@ -1,5 +1,5 @@
 <template>
-   <h1>1111</h1>
+<router-view ></router-view>
 </template>
   
 <script setup lang='ts'>
@@ -11,13 +11,6 @@
 </script>
   
 <style scoped lang="less">
-@import '@/assets/styles/variables.less';
-@import '@/assets/styles/mixins.less';
- h1 {
-   color: @xtxColor;
-   background-color:pink;
-   .hoverShadow ()
- }
 
   
 </style>
