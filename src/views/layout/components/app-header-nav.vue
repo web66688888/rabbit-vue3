@@ -2,16 +2,17 @@
     <ul class="app-header-nav">
       <li class="home"><RouterLink to="/">首页</RouterLink></li>
       <li v-for="item in category.list" :key="item.id">
-      <router-link to="#">{{item.name}}</router-link>
+      <!-- 处理用户在没有获取到数据的时候点击导致没有id出现undefined -->
+      <router-link :to="item.id ? `/category/${ item.id }` : '/'">{{item.name}}</router-link>
         <div class="layer" v-if="item.children">
         <ul>
           <li v-for="sub in item.children" :key="sub.id">
-            <a href="#">
+            <router-link :to="`/category/sub/${ sub.id }`">
               <img
                 :src="sub.picture"               
               />
-              <p>{{sub.name}}</p>
-            </a>
+              <p>{{ sub.name }}</p>
+            </router-link>
           </li>
         </ul>
       </div>
