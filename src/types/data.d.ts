@@ -5,6 +5,7 @@ export interface CategoryItem {
     id:string
     name:string
     picture:string
+    
   }[]
   goods:{
     desc:string
@@ -12,15 +13,25 @@ export interface CategoryItem {
     name:string
     picture:string
     price:string
-    discount:null
-    orderNum:null
+    discount?: any;
+    orderNum?: any;
   }[]
   id:string
   name:string
   picture:string
+  open:boolean
 }
 export interface ApiRes<T> {
     code:string
     msg:string
     result: T []
+}
+
+
+
+interface BannerItem {
+  id: string;
+  imgUrl: string;
+  hrefUrl: string;
+  type: string;
 }

@@ -1,7 +1,13 @@
 <template>
     <ul class="app-header-nav">
       <li class="home"><RouterLink to="/">首页</RouterLink></li>
-      <li v-for="item in category.list" :key="item.id">
+      <!-- 优化鼠标移入和离开 和点击让 显示样式和隐藏 -->
+      <li 
+      :class="{'open' : item.open}"
+      v-for="item in category.list" @mouseenter="category.show(item.id)" 
+      @mouseleave="category.hide(item.id)"
+      @click="category.hide(item.id)"
+      :key="item.id">
       <!-- 处理用户在没有获取到数据的时候点击导致没有id出现undefined -->
       <router-link :to="item.id ? `/category/${ item.id }` : '/'">{{item.name}}</router-link>
         <div class="layer" v-if="item.children">
@@ -48,7 +54,17 @@
       }
     }
     // 新增样式
-    &:hover {
+    // &:hover {
+    //   > a {
+    //     color: @xtxColor;
+    //     border-bottom: 1px solid @xtxColor;
+    //   }
+    //   > .layer {
+    //     height: 132px;
+    //     opacity: 1;
+    //   }
+    // }
+        &.open {
       > a {
         color: @xtxColor;
         border-bottom: 1px solid @xtxColor;

@@ -12,9 +12,19 @@ export default defineStore ('category',{
   actions:{
    async getAllCategory () {
       const res = await axios.get<ApiRes<CategoryItem>>('/home/category/head')
+      this.list.forEach( item => item.open = false)
       this.list = res.data.result
-      console.log(res);
-      
+      // console.log(res);
+    },
+
+    show ( id: string ) {
+      let item = this.list.find(item => item.id===id )
+      item && (item.open = true)
+    },
+
+    hide ( id: string ) {
+      let item = this.list.find(item => item.id===id )
+      item && (item.open = false)
     }
   }
 })
