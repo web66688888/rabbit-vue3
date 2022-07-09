@@ -7,7 +7,7 @@ home.getBannerlist()
 <template>
   <div class="home-banner">
     <!-- 轮播图 -->
-    <XtxCarousel/>
+    <XtxCarousel :autoplay="true" :duration="1500" :slides="home.Bannerlist"/>
   </div>
 </template>
 
@@ -23,5 +23,8 @@ home.getBannerlist()
   :deep(.xtx-carousel .carousel-btn.prev) {
     left: 270px;
   }
+  :deep(.carousel-indicator) {
+  padding-left: 200px;
+}
 }
 </style>

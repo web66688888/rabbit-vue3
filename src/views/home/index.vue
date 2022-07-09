@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import HomeBanner from './components/home-banner.vue'
 import HomeCategory from './components/home-category.vue'
+import HomeNew from './components/home-new.vue';
+import HomeHot from './components/home-hot.vue';
 </script>
 
 <template>
@@ -13,6 +15,8 @@ import HomeCategory from './components/home-category.vue'
         <HomeBanner />
       </div>
     </div>
+    <HomeNew/>
+    <HomeHot/>
   </div>
 </template>
 

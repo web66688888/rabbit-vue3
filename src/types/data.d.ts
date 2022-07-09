@@ -29,9 +29,26 @@ export interface ApiRes<T> {
 
 
 
-interface BannerItem {
+export interface BannerItem {
   id: string;
   imgUrl: string;
   hrefUrl: string;
   type: string;
+}
+
+export interface NewItem {
+  id: string;
+  name: string;
+  desc: string;
+  price: string;
+  picture: string;
+  discount?: any;
+  orderNum: number;
+}
+
+export interface HotItem {
+  id: string;
+  picture: string;
+  title: string;
+  alt: string;
 }
