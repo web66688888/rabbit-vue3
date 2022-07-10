@@ -9,7 +9,6 @@ import { useIntersectionObserver } from '@vueuse/core'
   const target = ref(null)
   useIntersectionObserver(target,(a) => {
     console.log(a);
-    
   })
 </script>
   

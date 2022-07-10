@@ -29,7 +29,7 @@
 <script setup lang='ts'>
   import useStore from "@/store";
   const { category } = useStore ()
-  category.getAllCategory()
+  // category.getAllCategory()
 </script>
     
 <style scoped lang="less">

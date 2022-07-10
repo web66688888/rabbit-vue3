@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from '@/utils/request'
-import { CategoryItem,ApiRes } from '@/types/data'
+import { CategoryItem,ApiRes, TopBread } from '@/types/data'
 import {topCategory} from '../constants'
 const defaulttopCategory = topCategory.map(item=>({name:item}))
 export default defineStore ('category',{
   state() {
       return {
-        list: defaulttopCategory as CategoryItem []
+        list: defaulttopCategory as CategoryItem [],
+        TopBread : {} as TopBread
       }
   },
   actions:{
@@ -25,6 +26,15 @@ export default defineStore ('category',{
     hide ( id: string ) {
       let item = this.list.find(item => item.id===id )
       item && (item.open = false)
+    },
+   async getTopBread(id:string) {
+      const res = await axios.get('/category',{
+        params:{
+          id
+        }
+      })
+      console.log(res)
+      this.TopBread = res.data.result
     }
   }
 })
