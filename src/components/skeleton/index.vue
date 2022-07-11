@@ -20,6 +20,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  opcity:{
+    type: String,
+    default: '1',
+  }
 })
 </script>
 <template>

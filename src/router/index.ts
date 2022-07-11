@@ -5,6 +5,7 @@ import Home from '@/views/home/index.vue'
 import playground from '@/views/playground/index.vue'
 import Category from '@/views/category/index.vue'
 import Sub from '@/views/category/sub.vue'
+import Goods from '@/views/goods/index.vue'
 const router = createRouter({
     routes : [
     {
@@ -22,6 +23,10 @@ const router = createRouter({
         {
             path:'Category/sub/:id',
             component: Sub
+        },
+        {
+            path:'goods/:id',
+            component: Goods
         }
     ]
     },
@@ -34,6 +39,11 @@ const router = createRouter({
         component: playground
     }
 ],
-    history: createWebHashHistory()
+    history: createWebHashHistory(),
+    scrollBehavior:() => {
+       return {
+        top:0
+       } 
+    }
 })
 export default router

@@ -4,7 +4,7 @@
       <!-- 优化鼠标移入和离开 和点击让 显示样式和隐藏 -->
       <li 
       :class="{'open' : item.open}"
-      v-for="item in category.list" @mouseenter="category.show(item.id)" 
+      v-for="item in category.list" @mousemove="category.show(item.id)" 
       @mouseleave="category.hide(item.id)"
       @click="category.hide(item.id)"
       :key="item.id">

@@ -110,14 +110,14 @@ export interface specialItem {
 }
 
 
-interface TopBread {
+export interface TopBread {
   id: string;
   name: string;
   picture?: any;
   children: TopBreadChild[];
 }
 
-interface TopBreadChild {
+export interface TopBreadChild {
   id: string;
   name: string;
   picture: string;
@@ -129,7 +129,7 @@ interface TopBreadChild {
   saleProperties?: any;
 }
 
-interface TopBreadGood {
+export interface TopBreadGood {
   id: string;
   name: string;
   desc: string;
@@ -137,4 +137,160 @@ interface TopBreadGood {
   picture: string;
   discount?: any;
   orderNum: number;
+}
+
+
+
+interface SubResult {
+  id: string;
+  name: string;
+  picture?: any;
+  parentId: string;
+  parentName: string;
+  goods: SubGood[];
+  categories: SubCategory[];
+  brands: SubBrand[];
+  saleProperties: SubSaleProperty[];
+}
+
+interface SubSaleProperty {
+  id: string;
+  name: string;
+  properties: SubProperty[];
+}
+
+interface SubProperty {
+  id: string;
+  name: string;
+}
+
+interface SubBrand {
+  id: string;
+  name: string;
+  nameEn: string;
+  logo: string;
+  picture: string;
+  type?: any;
+  desc: string;
+  place: string;
+}
+
+interface SubCategory {
+  id: string;
+  name: string;
+  layer: number;
+  parent?: any;
+}
+
+interface SubGood {
+  id: string;
+  name: string;
+  desc: string;
+  price: string;
+  picture: string;
+  discount?: any;
+  orderNum: number;
+}
+
+
+
+
+export interface GoodResult {
+  id: string;
+  name: string;
+  spuCode: string;
+  desc: string;
+  price: string;
+  oldPrice: string;
+  discount: number;
+  inventory: number;
+  brand: Brand;
+  salesCount: number;
+  commentCount: number;
+  collectCount: number;
+  mainVideos: any[];
+  videoScale: number;
+  mainPictures: string[];
+  specs: Spec[];
+  skus: Skus[];
+  categories: Category[];
+  details: Details;
+  isPreSale: boolean;
+  isCollect?: any;
+  recommends?: any;
+  userAddresses?: any;
+  similarProducts: SimilarProduct[];
+  hotByDay: SimilarProduct[];
+  evaluationInfo?: any;
+}
+
+interface SimilarProduct {
+  id: string;
+  name: string;
+  desc: string;
+  price: string;
+  picture: string;
+  discount?: any;
+  orderNum: number;
+}
+
+interface Details {
+  pictures: string[];
+  properties: Property[];
+}
+
+interface Property {
+  name: string;
+  value: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  layer: number;
+  parent?: Parent;
+}
+
+interface Parent {
+  id: string;
+  name: string;
+  layer: number;
+  parent?: any;
+}
+
+interface Skus {
+  id: string;
+  skuCode: string;
+  price: string;
+  oldPrice: string;
+  inventory: number;
+  specs: Spec2[];
+}
+
+interface Spec2 {
+  name: string;
+  valueName: string;
+}
+
+interface Spec {
+  name: string;
+  id: string;
+  values: Value[];
+}
+
+interface Value {
+  name: string;
+  picture?: string;
+  desc: string;
+}
+
+interface Brand {
+  id: string;
+  name: string;
+  nameEn: string;
+  logo: string;
+  picture: string;
+  type?: any;
+  desc?: any;
+  place?: any;
 }
