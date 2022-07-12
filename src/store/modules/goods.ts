@@ -16,6 +16,9 @@ export default defineStore('goods',{
         })
         console.log(res);
         this.Info = res.data.result
+      },
+      clearInfo() {
+        this.Info = {} as GoodResult
       }
     }
 })

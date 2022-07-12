@@ -3,10 +3,14 @@ import useStore  from '@/store'
 import { watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import GoodsImage from './components/goods-image.vue';
+import { GoodResult } from '@/types/data'
+import GoodsSales from './components/goods-sales.vue';
+import GoodsName from './components/goods-name.vue';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
     if(route.fullPath!=='/goods/'+ route.params.id) return
+    goods.clearInfo()
     goods.getgoods(route.params.id as string)
 })
 </script>
@@ -30,8 +34,11 @@ watchEffect(() => {
       <div class="goods-info">
         <div class="media">
           <GoodsImage :images="goods.Info.mainPictures"></GoodsImage>
+          <GoodsSales/>
         </div>
-        <div class="spec"></div>
+        <div class="spec">
+          <GoodsName :good="goods.Info"/>
+        </div>
       </div>
       <!-- 商品详情 -->
       <div class="goods-footer">

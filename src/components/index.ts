@@ -2,6 +2,7 @@ import XtxSkeleton from '@/components/skeleton/index.vue'
 import XtxCarousel from '@/components/carousel/index.vue'
 import XtxMore from '@/components/more/index.vue'
 import Bread from './Bread/index.vue'
+import XtxCity from './city/index.vue'
 import BreadItem from './Bread/Item.vue'
 import { App } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
@@ -16,6 +17,7 @@ export default {
       app.component(XtxMore.name, XtxMore)
       app.component(Bread.name, Bread)
       app.component(BreadItem.name, BreadItem)
+      app.component(XtxCity.name, XtxCity)
     // import { useIntersectionObserver } from '@vueuse/core'
     // 全局注册指令
     //参数1 :指令名
