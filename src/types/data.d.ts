@@ -224,7 +224,7 @@ export interface GoodResult {
   evaluationInfo?: any;
 }
 
-interface SimilarProduct {
+export interface SimilarProduct {
   id: string;
   name: string;
   desc: string;
@@ -234,31 +234,31 @@ interface SimilarProduct {
   orderNum: number;
 }
 
-interface Details {
+export interface Details {
   pictures: string[];
   properties: Property[];
 }
 
-interface Property {
+export interface Property {
   name: string;
   value: string;
 }
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   layer: number;
   parent?: Parent;
 }
 
-interface Parent {
+export interface Parent {
   id: string;
   name: string;
   layer: number;
   parent?: any;
 }
 
-interface Skus {
+export interface Skus {
   id: string;
   skuCode: string;
   price: string;
@@ -267,24 +267,25 @@ interface Skus {
   specs: Spec2[];
 }
 
-interface Spec2 {
+export interface Spec2 {
   name: string;
   valueName: string;
 }
 
-interface Spec {
+export interface Spec {
   name: string;
   id: string;
   values: Value[];
 }
 
-interface Value {
+export interface Value {
   name: string;
   picture?: string;
   desc: string;
+  selected:boolean
 }
 
-interface Brand {
+export interface Brand {
   id: string;
   name: string;
   nameEn: string;

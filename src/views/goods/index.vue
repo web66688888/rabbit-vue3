@@ -3,9 +3,9 @@ import useStore  from '@/store'
 import { watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import GoodsImage from './components/goods-image.vue';
-import { GoodResult } from '@/types/data'
 import GoodsSales from './components/goods-sales.vue';
 import GoodsName from './components/goods-name.vue';
+import GoodsSku from './components/goods-sku.vue';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -38,6 +38,7 @@ watchEffect(() => {
         </div>
         <div class="spec">
           <GoodsName :good="goods.Info"/>
+           <GoodsSku :good="goods.Info"/>
         </div>
       </div>
       <!-- 商品详情 -->
