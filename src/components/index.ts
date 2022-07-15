@@ -4,9 +4,11 @@ import XtxMore from '@/components/more/index.vue'
 import Bread from './Bread/index.vue'
 import XtxCity from './city/index.vue'
 import BreadItem from './Bread/Item.vue'
+import XtxNumbox from '@/components/numbox/index.vue'
 import { App } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import defaultImg from '@/assets/images/200.png'
+import XtxButton from '@/components/button/index.vue'
 export default {
   // V2 传入 Vue对象
   // V3 传入 app 对象
@@ -18,6 +20,8 @@ export default {
       app.component(Bread.name, Bread)
       app.component(BreadItem.name, BreadItem)
       app.component(XtxCity.name, XtxCity)
+      app.component(XtxNumbox.name, XtxNumbox)
+      app.component(XtxButton.name, XtxButton)
     // import { useIntersectionObserver } from '@vueuse/core'
     // 全局注册指令
     //参数1 :指令名

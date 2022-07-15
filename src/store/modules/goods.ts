@@ -14,7 +14,7 @@ export default defineStore('goods',{
             id
           }
         })
-        console.log(res);
+        // console.log(res);
         this.Info = res.data.result
       },
       clearInfo() {

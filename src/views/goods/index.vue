@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import useStore  from '@/store'
-import { watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import GoodsImage from './components/goods-image.vue';
 import GoodsSales from './components/goods-sales.vue';
 import GoodsName from './components/goods-name.vue';
 import GoodsSku from './components/goods-sku.vue';
+import GoodsDetail from './components/goods-detail.vue';
+import GoodsHot from './components/goods-hot.vue';
 const { goods } = useStore()
 const route = useRoute()
 watchEffect(() => {
@@ -13,6 +15,14 @@ watchEffect(() => {
     goods.clearInfo()
     goods.getgoods(route.params.id as string)
 })
+const hchangeSku = (skuid :string) => {
+    // console.log('父组件',skuid);
+   const sku = goods.Info.skus.find(item => item.id === skuid)
+    if(!sku)  return
+    goods.Info.price = sku?.price
+    goods.Info.oldPrice = sku?.oldPrice
+}
+const count =ref(1)
 </script>
 <template>
   <div class="xtx-goods-page" v-if="goods.Info.categories">
@@ -38,17 +48,26 @@ watchEffect(() => {
         </div>
         <div class="spec">
           <GoodsName :good="goods.Info"/>
-           <GoodsSku :good="goods.Info"/>
-        </div>
+           <GoodsSku @changeSku="hchangeSku" skuID="1369155864430120962" :good="goods.Info"/>
+           <XtxNumbox v-model="count" :max="10" :min="1" show-label></XtxNumbox>
+       </div>
       </div>
       <!-- 商品详情 -->
       <div class="goods-footer">
         <div class="goods-article">
           <!-- 商品+评价 -->
-          <div class="goods-tabs"></div>
+          <div class="goods-tabs">
+            <GoodsDetail :goods="goods.Info" />
+          </div>
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <div class="goods-aside">
+          <div class="goods-aside">
+            <GoodsHot :type="1" />
+            <GoodsHot :type="2" />
+            <GoodsHot :type="3" />
+          </div>
+          </div>
       </div>
     </div>
   </div>

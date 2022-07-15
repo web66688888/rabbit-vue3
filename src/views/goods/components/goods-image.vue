@@ -24,7 +24,7 @@ const active = ref(0)
   <div class="goods-image">
     <div class="large" 
     v-if="!isOutside" 
-    :style="[{background:`url(${images[active]}) ${-position.x * 2}px ${-position.y * 2}px`}]"></div>
+    :style="[{backgroundImage:`url(${images[active]})`,backgroundPosition:` ${-position.x * 2}px ${-position.y * 2}px` }]"></div>
     <div class="middle" ref="target">
       <img
         :src="images[active]"

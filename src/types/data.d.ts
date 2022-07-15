@@ -282,7 +282,8 @@ export interface Value {
   name: string;
   picture?: string;
   desc: string;
-  selected:boolean
+  selected:boolean,
+  disabled:boolean
 }
 
 export interface Brand {

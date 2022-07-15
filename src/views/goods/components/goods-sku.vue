@@ -1,48 +1,84 @@
 <script setup lang="ts" name="GoodsSku">
 import { GoodResult, Spec, Value } from '@/types/data';
 import bwPowerSet from '@/utils/bwPowerSet'
-import { ref } from 'vue';
 const props = defineProps<{
   good :GoodResult
+  skuID ?:string
 }>()
+const emits = defineEmits<{
+  (e:'changeSku',skuID:string ):void
+}>()
+  const Sparator = '✔'
 const changeselected = (sub :Value ,item : Spec) => {
-      item.values.forEach(i => i.selected = false)
-      sub.selected =! sub.selected
-}
-const skus = props.good.skus.filter(item => item.inventory > 0)
-  const obj = {} as any
-// skus.forEach((item) => {
-//   const arr = item.specs.map(sub => sub.valueName)
-//   console.log(arr);
-//   const powerset = bwPowerSet(arr)
-//   powerset.forEach(sub => {
-//     const key = sub.join('✔')
-//     if(key in obj) {
-//         obj[key].push(item.id)
-//     } else {
-//       obj[key] = [item.id]
-//     }
-//   })
-// })
-const arr = skus.map(item => item.specs.map(i => i.valueName))
-arr.forEach(item => {
-    const powerset = bwPowerSet(item)
-    // console.log(powerset);
-    powerset.forEach(sub=> {
-      const key = sub.join('$')
-      if(key in obj) {
-        obj[key].push(true)
-      } else {
-        obj[key] = [true]
+      if (sub.disabled) return
+      item.values.filter(k => k.name !== sub.name).forEach(i => i.selected = false)
+      sub.selected = !sub.selected
+      updateDisabledStatus()
+      const resault = getSelectedSpec()
+      if(resault.every(item => item)) {
+        const key = resault.join(Sparator)
+        const val = pathMap[key]
+        console.log(val[0]);
+        emits('changeSku',val[0])
       }
-    })
+}
+//获取路径字典
+function getPathMap()  {
+  const skus = props.good.skus.filter(item => item.inventory > 0)
+  const pathMap: any = {}
+skus.forEach(item => {
+  const arr = item.specs.map(v => v.valueName)
+  // console.log(arr);
+  const resault = bwPowerSet(arr)
+  resault.forEach(sub => {
+    const key = sub.join(Sparator)
+    if(key in pathMap) {
+        pathMap[key].push(item.id)
+    } else {
+      pathMap[key] = [item.id]
+    }
+  })
 })
-// console.log(arr);
-console.log(obj);
+return pathMap
+}
 
+function updateDisabledStatus() {
+  props.good.specs.forEach((item,index) => {
+  item.values.forEach(sub => {
+    const selectedArr = getSelectedSpec()
+    selectedArr[index] = sub.name
+    const key = selectedArr.filter(v => v).join(Sparator)
+    sub.disabled = !(key in pathMap)
+  })
+})
+}
+// console.log(('10cm' in pathMap));
+function getSelectedSpec() {
+  const arr :string [] = []
+  props.good.specs.forEach(item =>{
+        const res = item.values.find(sub => sub.selected)
+        arr.push(res?.name || '')
+  })
+  return arr
+}
+// console.log(getSelectedSpec());
 
+// console.log(pathMap);
+const initSelectedSpec = () => {
+  const sku = props.good.skus.find(item => item.id === props.skuID)
+  if (sku) {
+    props.good.specs.forEach((item,index) => {
+      const value = sku.specs[index].valueName
+      const spec = item.values.find(item => item.name === value)
+      spec!.selected = true
+    })
 
-//  arr.map(i => )
+  }
+}
+const pathMap = getPathMap()
+initSelectedSpec()
+updateDisabledStatus()
+
 </script>
 <template>
   <div class="goods-sku">
@@ -52,13 +88,14 @@ console.log(obj);
         <template v-for="sub in item.values" :key="sub.name">
           <img v-if="sub.picture"
           @click="changeselected(sub,item)"
-          :class="{selected : sub.selected}"
+          :class="{selected : sub.selected,disabled : sub.disabled }"
           :src="sub.picture"
+          :title="sub.name"
           alt=""
         />
         <span 
         @click="changeselected(sub,item)"
-        :class="{selected : sub.selected}" v-else>{{ sub.name }}</span>       
+        :class="{selected : sub.selected,disabled : sub.disabled }" v-else>{{ sub.name }}</span>       
         </template>
       </dd>
     </dl>
