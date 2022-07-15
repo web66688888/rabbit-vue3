@@ -1,19 +1,16 @@
 <template>
-<div class="bx"></div>
-    <img ref="img" src="@/assets/images/qrcode.jpg" alt="">
+    <div ref="dv"></div>
 </template>
   
 <script setup lang='ts'>
-import { ref } from 'vue'
-import { useIntersectionObserver } from '@vueuse/core'
-  const target = ref(null)
-  useIntersectionObserver(target,(a) => {
-    console.log(a);
-  })
+import { h,onMounted,ref,render } from "vue";
+const dv = ref<HTMLDivElement | null>(null)
+const vnode = h('h1',{ title:'年龄'},'小姑娘18岁')
+onMounted(() => {
+  render(vnode , dv.value as HTMLDivElement)
+})
 </script>
   
 <style>
-  .bx {
-    height: 2000px;
-  }
+  
 </style>

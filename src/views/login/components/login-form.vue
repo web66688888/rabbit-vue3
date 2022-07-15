@@ -1,14 +1,96 @@
 <script lang="ts" setup name="LoginForm">
-import { ref } from 'vue';
+import { Message } from '@/components/message';
+import useStore from '@/store';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import  { useField, useForm } from 'vee-validate'
 const active = ref<'account' | 'mobile'>('mobile')
+const router = useRouter()
+const {user} = useStore()
+// const form = ref<{
+//   account:string
+//   password:string
+//   isAgree:boolean
+// }>({
+//   account:'',
+//   password:'',
+//   isAgree:false
+//   })
+const { validate, resetForm } = useForm({
+  validationSchema : {
+    account(value : string) {
+      if(value?.trim().length === 0 ) return '用户名不能为空'
+      if(!/^[a-zA-Z]\w{5,19}$/.test(value)) return '用户名必须是6-20字符且字母开头'
+      return true
+    },
+    password(value: string) {
+      if(value?.trim().length === 0 ) return '密码不能为空'
+      if(!/^\w{6,24}$/.test(value)) return '用户名必须是6-24字符'
+      return true
+    },
+    isAgree(value: boolean) {
+      if(!value ) return '请勾选同意条款'
+      return true
+    },
+    mobile(value:string) {
+        if(!value)  return '手机号不能为空'
+        if(!/^1[3-9]\d{9}$/.test(value)) return '手机号格式错误'
+      return true
+    },
+    code(value:string) {
+      if(!value)  return '验证码不能为空'
+      if(!/^\d{6}$/.test(value))  return '验证码格式错误'
+      return true
+    }
+  }
+})
+ const { value : account, errorMessage : accountMessage } = useField<string>('account')
+ const { value : password, errorMessage: passwordMessage } = useField<string>('password')
+ const { value : isAgree, errorMessage: isAgreedMessage } = useField<boolean>('isAgree')
+ const { value : mobile, errorMessage: mobileMessage } = useField<boolean>('mobile')
+ const { value : code, errorMessage: codeMessage } = useField<boolean>('code')
+const login = async () => {
+ const res = await validate()
+  if(!res.valid) return
+  // Message.success('飞一样的感觉')
+  // if (form.value.account === '') {
+  //   Message({ type: 'error', text: '用户名或手机号不能为空' })
+  //   return
+  // }
+  // if (form.value.password === '') {
+  //   Message({ type: 'error', text: '密码不能为空' })
+  //   return
+  // }
+  // if (!form.value.isAgree) {
+  //   Message({ type: 'error', text: '请同意许可' })
+  //   return
+  // }
+  // console.log('通过校验，可以发送请求')
+  try {
+    await user.getUserInfo({ account:account.value,password:password.value })
+    router.push('/')
+  } catch (e) {
+    Message.error('用户名或者密码错误')
+  }
+}
+// const changelogin = (msg:'account' | 'mobile') => {
+//     active.value = msg
+//     resetForm()
+// }
+watch(active,() => {
+    resetForm()
+
+})
 </script>
 <template>
   <div class="account-box">
     <div class="toggle">
-      <a href="javascript:;" v-if="active==='account'" @click="active = 'mobile'">
+      <!-- <a href="javascript:;" v-if="active==='account'" @click="changelogin('mobile')"> -->
+      <a href="javascript:;" v-if="active==='account'" @click="active='mobile'">
         <i class="iconfont icon-user"></i> 使用账号登录
       </a>
-      <a href="javascript:;" v-else @click="active = 'account'">
+      <!-- <a href="javascript:;" v-else @click="changelogin('account')"> -->
+      <a href="javascript:;" v-else @click="active='account'">
         <i class="iconfont icon-msg"></i> 使用短信登录
       </a>
     </div>
@@ -17,42 +99,45 @@ const active = ref<'account' | 'mobile'>('mobile')
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入用户名或手机号" />
+            <input v-model="account" type="text" placeholder="请输入用户名或手机号" />
           </div>
-          <!-- <div class="error"><i class="iconfont icon-warning" />请输入手机号</div> -->
+          <div class="error"><i class="iconfont icon-warning" v-if="accountMessage"/>{{accountMessage }}</div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-lock"></i>
-            <input type="password" placeholder="请输入密码" />
+            <input type="password" v-model="password" placeholder="请输入密码" />
           </div>
+          <div class="error"><i class="iconfont icon-warning" v-if="passwordMessage"/>{{ passwordMessage }}</div>
         </div>
       </template>
       <template v-else>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入手机号" />
+            <input v-model="mobile" type="text" placeholder="请输入手机号" />
           </div>
+          <div class="error"><i class="iconfont icon-warning" v-if="mobileMessage"/>{{ mobileMessage }}</div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <input type="password" placeholder="请输入验证码" />
+            <input type="password" v-model="code" placeholder="请输入验证码" />
             <span class="code">发送验证码</span>
           </div>
+          <div class="error"><i class="iconfont icon-warning" v-if="codeMessage"/>{{ codeMessage }}</div>
         </div>
       </template>
       <div class="form-item">
         <div class="agree">
-         
-          <span>我已同意</span>
+         <xtx-checkbox  v-model="isAgree"> <span>我已同意</span></xtx-checkbox>
           <a href="javascript:;">《隐私条款》</a>
           <span>和</span>
           <a href="javascript:;">《服务条款》</a>
         </div>
+        <div class="error"><i class="iconfont icon-warning" v-if="isAgreedMessage"/>{{isAgreedMessage }}</div>
       </div>
-      <a href="javascript:;" class="btn">登录</a>
+      <a href="javascript:;" class="btn" @click="login">登录</a>
     </div>
     <div class="action">
       <img

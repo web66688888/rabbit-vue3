@@ -5,6 +5,7 @@ import Bread from './Bread/index.vue'
 import XtxCity from './city/index.vue'
 import BreadItem from './Bread/Item.vue'
 import XtxNumbox from '@/components/numbox/index.vue'
+import XtxCheckbox from '@/components/checkbox/index.vue'
 import { App } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import defaultImg from '@/assets/images/200.png'
@@ -22,6 +23,7 @@ export default {
       app.component(XtxCity.name, XtxCity)
       app.component(XtxNumbox.name, XtxNumbox)
       app.component(XtxButton.name, XtxButton)
+      app.component(XtxCheckbox.name, XtxCheckbox)
     // import { useIntersectionObserver } from '@vueuse/core'
     // 全局注册指令
     //参数1 :指令名
