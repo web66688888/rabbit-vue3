@@ -4,6 +4,7 @@ import useStore from '@/store';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import  { useField, useForm } from 'vee-validate'
+import { useCountDown } from '@/utils/hooks';
 const active = ref<'account' | 'mobile'>('mobile')
 const router = useRouter()
 const {user} = useStore()
@@ -32,6 +33,7 @@ const { validate, resetForm } = useForm({
       if(!value ) return '请勾选同意条款'
       return true
     },
+    
     mobile(value:string) {
         if(!value)  return '手机号不能为空'
         if(!/^1[3-9]\d{9}$/.test(value)) return '手机号格式错误'
@@ -44,43 +46,73 @@ const { validate, resetForm } = useForm({
     }
   }
 })
+// =================
+type valid = {
+    errors:[]
+    valid:boolean
+}
+type item = {
+  account:valid
+  code:valid
+  isAgree:valid
+  mobile:valid
+  password:valid
+}
+// ===============
  const { value : account, errorMessage : accountMessage } = useField<string>('account')
  const { value : password, errorMessage: passwordMessage } = useField<string>('password')
  const { value : isAgree, errorMessage: isAgreedMessage } = useField<boolean>('isAgree')
- const { value : mobile, errorMessage: mobileMessage } = useField<boolean>('mobile')
- const { value : code, errorMessage: codeMessage } = useField<boolean>('code')
-const login = async () => {
- const res = await validate()
-  if(!res.valid) return
-  // Message.success('飞一样的感觉')
-  // if (form.value.account === '') {
-  //   Message({ type: 'error', text: '用户名或手机号不能为空' })
-  //   return
-  // }
-  // if (form.value.password === '') {
-  //   Message({ type: 'error', text: '密码不能为空' })
-  //   return
-  // }
-  // if (!form.value.isAgree) {
-  //   Message({ type: 'error', text: '请同意许可' })
-  //   return
-  // }
-  // console.log('通过校验，可以发送请求')
-  try {
-    await user.getUserInfo({ account:account.value,password:password.value })
-    router.push('/')
-  } catch (e) {
-    Message.error('用户名或者密码错误')
-  }
+ const { value : mobile, errorMessage: mobileMessage ,validate :validMobile} = useField<string>('mobile')
+ const { value : code, errorMessage: codeMessage } = useField<string>('code')
+  const login = async () => {
+  const res = await validate()
+  const  as = res.results as item
+  if(active.value === 'mobile') {
+      if(as.account.valid && as.password.valid &&as.isAgree.valid) {
+          try {
+          await user.getUserInfo({ account:account.value,password:password.value })
+          router.push('/')
+        } catch (e) {
+          Message.error('用户名或者密码错误')
+        }
+      }
+ } else {
+  if(as.mobile.valid && as.code.valid &&as.isAgree.valid) {
+          try {
+          await user.mobileLogin({ mobile:mobile.value,code:code.value })
+          router.push('/')
+        } catch (e) {
+          Message.error('用户名或者密码错误')
+        }
+      }
+ }
 }
-// const changelogin = (msg:'account' | 'mobile') => {
-//     active.value = msg
-//     resetForm()
-// }
 watch(active,() => {
     resetForm()
-
 })
+const  codeRef = ref<HTMLInputElement | null>(null)
+const  mobileRef = ref<HTMLInputElement | null>(null)
+const { time, start } = useCountDown(5)
+const send =async () => {
+   // 校验通过后开始倒计时
+  if (time.value > 0) return
+  start()
+//   if(time.value > 0) return
+//     time.value = 5
+//  const timer = setInterval(()=> {
+//     time.value --
+//     if(time.value === 0)  clearInterval(timer)
+//   },1000)
+  // const res = await validMobile()
+  // if(!res.valid) return  mobileRef.value?.focus()
+  // codeRef.value?.focus()
+  // try {
+  //   await user.getCode(mobile.value)
+  //   Message.success('获取验证码成功')
+  // } catch {
+  //   Message.error('获取验证码失败')
+  // }
+}
 </script>
 <template>
   <div class="account-box">
@@ -115,15 +147,15 @@ watch(active,() => {
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input v-model="mobile" type="text" placeholder="请输入手机号" />
+            <input v-model="mobile" ref="mobileRef" type="text" placeholder="请输入手机号" />
           </div>
           <div class="error"><i class="iconfont icon-warning" v-if="mobileMessage"/>{{ mobileMessage }}</div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <input type="password" v-model="code" placeholder="请输入验证码" />
-            <span class="code">发送验证码</span>
+            <input type="password" ref="codeRef" v-model="code" placeholder="请输入验证码" />
+            <span class="code" @click="send">{{ time === 0 ? '发送验证码' : `${ time }s后重新发送` }}</span>
           </div>
           <div class="error"><i class="iconfont icon-warning" v-if="codeMessage"/>{{ codeMessage }}</div>
         </div>
@@ -140,10 +172,11 @@ watch(active,() => {
       <a href="javascript:;" class="btn" @click="login">登录</a>
     </div>
     <div class="action">
-      <img
-        src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
-        alt=""
-      />
+      <a href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&amp;response_type=token&amp;scope=all&amp;redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback"
+        ><img
+          src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
+          alt="QQ登录"
+          border="0"/></a>
       <div class="url">
         <a href="javascript:;">忘记密码</a>
         <a href="javascript:;">免费注册</a>

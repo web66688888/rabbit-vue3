@@ -1,11 +1,13 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import Layout from '@/views/layout/index.vue'
 import Login from '@/views/login/index.vue'
+import callback from '@/views/login/callback.vue'
 import Home from '@/views/home/index.vue'
 import playground from '@/views/playground/index.vue'
 import Category from '@/views/category/index.vue'
 import Sub from '@/views/category/sub.vue'
 import Goods from '@/views/goods/index.vue'
+
 const router = createRouter({
     routes : [
     {
@@ -37,6 +39,10 @@ const router = createRouter({
     {
         path:'/playground',
         component: playground
+    },
+    {
+        path:'/login/callback',
+        component: callback
     }
 ],
     history: createWebHashHistory(),

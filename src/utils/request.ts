@@ -1,4 +1,5 @@
-import axios from 'axios'
+import { Message } from '@/components/message'
+import axios, { AxiosError } from 'axios'
 
 // 备用接口地址: http://pcapi-xiaotuxian-front-devtest.itheima.net/
 const instance = axios.create({
@@ -13,8 +14,13 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     return config
   },
-  function (error) {
+  function (error:AxiosError<{message:string,code:string}>) {
     // 对请求错误做些什么
+    if(error.response) {
+      Message.error(error.response.data.message)
+    } else {
+      Message.error('网络错误,请重试')
+    }
     return Promise.reject(error)
   }
 )

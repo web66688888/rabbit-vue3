@@ -24,5 +24,11 @@ export default defineConfig({
         `
       }
     }
+  },
+  server:{
+    host:'www.corho.com',
+    port:8080,
+    open:true, //打开浏览器
+    cors:true  //允许开发跨域
   }
 })

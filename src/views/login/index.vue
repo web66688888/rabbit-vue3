@@ -3,7 +3,7 @@ import LoginHeader from './components/login-header.vue'
 import LoginFooter from './components/login-footer.vue'
 import { ref } from 'vue';
 import LoginForm from './components/login-form.vue';
-const active = ref<'account' | 'qrcode'>('qrcode')
+const active = ref<'account' | 'qrcode'>('account')
 </script>
 <template>
   <LoginHeader>欢迎登录</LoginHeader>
