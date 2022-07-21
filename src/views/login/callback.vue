@@ -5,6 +5,12 @@ import CallbackBind from './components/callback-bind.vue'
 import CallbackPatch from './components/callback-patch.vue'
 import { ref } from 'vue';
 const hasAccount = ref(true)
+ const isLogin = QC.Login.check()
+ if(isLogin) {
+  QC.Login.getMe(openid => {
+    console.log(openid);
+  })
+ }
 </script>
 
 <template>
